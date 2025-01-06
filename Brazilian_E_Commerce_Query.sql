@@ -229,12 +229,12 @@ ORDER BY
 --Q3: Calculate the number of successful orders and the total payment amount by payment method, ranked from most to least used. Which categories have the highest use of installment payments?
 
 SELECT
-       p.payment_type,
-      ROUND(SUM(p.payment_value)::numeric, 2) AS total_payment,
-	  COUNT(payment_type) AS payment_count
+    p.payment_type,
+    TO_CHAR(SUM(p.payment_value), '999,999,999.99') AS total_payment,
+    TO_CHAR(COUNT(p.payment_type), '999,999.99') AS payment_count
 FROM payments p
 JOIN orders o ON o.order_id = p.order_id
 WHERE o.order_status = 'delivered'
 GROUP BY p.payment_type
-ORDER BY 3 DESC;
+ORDER BY payment_count DESC;
 
