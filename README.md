@@ -550,6 +550,39 @@ ORDER BY
 
 When analyzing the output, it has been observed that the categories with the highest number of both installment and single-payment orders are the same. The payment method for orders in these categories may vary depending on the price. Additionally, these categories also see the highest sales. Categories with installment payments tend to include more housewears and health- beauty, while categories with single payments prominently feature entertainment and technological accessories.
 
+### ✅ Question 3 - Calculate the number of successful orders and the total payment amount by payment method, ranked from most to least used.
+
+This query calculates the total number of successful orders and the total payment amount for each payment method. We are focusing on orders that have been successfully delivered. The results are sorted by the number of successful orders in descending order, making it easier to identify the most frequently used payment methods.
+
+<details>
+<summary>
+🧮 Query & Output
+</summary>
+
+```sql
+SELECT
+    p.payment_type,
+    TO_CHAR(SUM(p.payment_value), '999,999,999.99') AS total_payment,
+    TO_CHAR(COUNT(p.payment_type), '999,999.99') AS payment_count
+FROM payments p
+JOIN orders o ON o.order_id = p.order_id
+WHERE o.order_status = 'delivered'
+GROUP BY p.payment_type
+ORDER BY payment_count DESC;
+```
+#### Output Example
+
+| payment_type | total_payment   | payment_count |
+|--------------|-----------------|---------------|
+| credit_card  | 12,101,094.88    | 74,586        |
+| boleto       |  2,769,932.58    | 19,191        |
+| voucher      |    343,013.19    |  5,493        |
+| debit_card   |    208,421.12    |  1,486        |
+
+</details>
+
+The results above clearly show that credit card is the most commonly used payment method, with a total of 74,586 successful orders and payments amounting to $12,101,094.88. This is followed by boleto and voucher.  
+
 ### 👏 Thank You! 
 
 Thank you to everyone who has explored this repository. If you found the project useful or insightful, please consider giving it a star ⭐ to help others discover it more easily.
